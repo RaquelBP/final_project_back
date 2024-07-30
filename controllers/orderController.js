@@ -1,4 +1,5 @@
 const client = require('../db')
+const { sendOrderCompletionEmail } = require('./emailController.js');
 
 exports.handleOrder = async (req, res) => {
     const { products, userEmail } = req.body;
@@ -58,10 +59,30 @@ exports.handleOrder = async (req, res) => {
 
         
         if (userEmail) {
-            console.log(`Email del usuario: ${userEmail}`)
+            const orderInformation = `
+                Gracias por completar tu compra en McDowell's. ¡En unos minutos tendrás la comida en tus manos!
+                Esta es la información detallada de tu pedido:
+
+                ID del pedido: ${orderId}
+                Fecha del pedido: ${orderCreatedAt}
+
+
+                Detalles del pedido:
+                ${products.map(product => `
+                Producto: ${product.product_name}
+                Cantidad: ${product.quantity}
+                Precio Unitario: ${(product.sub_total_price / product.quantity).toFixed(2)}€
+                Precio Total del producto: ${product.sub_total_price.toFixed(2)}€
+                `).join('\n')}
+
+                Precio total del pedido: ${total_price.toFixed(2)}€
+                Tiempo estimado de preparación: ${total_minutes} minutos
+            `;
+
+            sendOrderCompletionEmail(userEmail, orderInformation);
         }
 
-        
+        /*
         console.log(`Detalles del pedido (ID: ${orderId}, Fecha: ${orderCreatedAt}):`)
         products.forEach((product) => {
             if(product.name){
@@ -70,6 +91,7 @@ exports.handleOrder = async (req, res) => {
             console.log(`Producto ID: ${product.product_id}, Cantidad: ${product.quantity}, Precio Unitario: ${product.sub_total_price / product.quantity}, Precio Total: ${product.sub_total_price}`)
         });
         console.log(`Precio total del pedido: ${total_price}`);
+        */
 
         res.status(201).json({ message: 'Order created successfully', orderId })
     } catch (err) {
