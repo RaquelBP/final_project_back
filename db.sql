@@ -7,10 +7,7 @@ CREATE TABLE product (
     minutes NUMERIC NOT NULL,
     category VARCHAR(100),
     description TEXT,
-    image_link TEXT,
-    amount INT DEFAULT 0,
-    total_price DECIMAL(10, 2) DEFAULT 0,
-    total_minutes INT DEFAULT 0
+    image_link TEXT
 );
 
 CREATE TABLE "order" (
@@ -36,3 +33,16 @@ CREATE TABLE OrderProduct (
 INSERT INTO product (name, price, minutes, category, description, image_link) VALUES 
 ('McDowell''s Menu', 15, 3, 'Menus', 'Famoso menú McDowell que incluye hamburguesa, patatas y bebida', 'https://mcdonalds.es/api/cms/images/mcdonalds-es/Zg03_Mt2UUcvBWtC_1080x943_McMenu_Mediano_BigMac.png?auto=format,compress'), 
 ('McDowell''s Menu Junior', 10, 2, 'Menus', 'El famoso menú McDowell que incluye hamburguesa, patatas, bebida, postre ¡y un juguete sorpresa! para los pequeños de la casa', 'https://mcdonalds.es/api/cms/images/mcdonalds-es/1b67ec16-b22b-417b-a118-df4602007246_2-HMChicken+Burger+Kids.png?auto=compress,format');
+
+
+
+CREATE TABLE users (
+	id SERIAL PRIMARY KEY,
+	email VARCHAR(255) UNIQUE NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	name VARCHAR(255),
+	is_admin BOOLEAN DEFAULT FALSE
+);
+
+INSERT INTO users (email, password, name, is_admin) VALUES
+('demo@demo.com', 'demo', 'Admin', True)

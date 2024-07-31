@@ -13,7 +13,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/', clientRoutes); //Tienda Index cliente
 
-//app.use('/api/user', userRoutes); //Todas las rutas de usuario comenzarás por /api/user/
+app.use('/users', userRoutes)
 
 app.listen(port, () => {
     console.log(`API listening on http://localhost:${port}`);

@@ -9,7 +9,7 @@ router.post('/order/:id/ticket'); //Envia el ticket por email
 
 //ESTO VA AL ADMIN PANEL??
 router.get('/products', productController.getProducts)
-router.get('/orders')
+//router.get('/orders')
 
 
 
