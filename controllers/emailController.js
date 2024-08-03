@@ -1,5 +1,4 @@
-const nodemailer = require('nodemailer');
-
+const nodemailer = require('nodemailer')
 
 
 const transporter = nodemailer.createTransport({
@@ -10,7 +9,7 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   }
-});
+})
 
 const sendOrderCompletionEmail = (clientEmail, orderDetails) => {
     
@@ -19,16 +18,17 @@ const sendOrderCompletionEmail = (clientEmail, orderDetails) => {
     to: clientEmail,
     subject: "McDowell's Order Completed",
     text: orderDetails
-    };
+    }
 
     
     transporter.sendMail(mailOptions, function(error, info){
     if (error) {
-        console.log('Error:', error);
+        console.log('Error:', error)
+
     } else {
-        console.log('Email sent:', info.response);
+        console.log('Email sent:', info.response)
     }
-    })
+  })
 }
 
-module.exports = { sendOrderCompletionEmail };
+module.exports = { sendOrderCompletionEmail }

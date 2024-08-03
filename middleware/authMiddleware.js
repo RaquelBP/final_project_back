@@ -4,9 +4,7 @@ require('dotenv').config();
 module.exports = (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '')
     if (!token) {
-
-        console.log("AuthMiddleware no token")
-
+      
         return res.status(401).json({ error: 'Acceso denegado, no token proporcionado' })
     }
 

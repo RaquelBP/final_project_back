@@ -1,7 +1,7 @@
-const client = require('../db');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const client = require('../db')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 exports.registerUser = async (req, res) => {
     const { email, password, name, isAdmin } = req.body
@@ -20,8 +20,9 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   try {
-      const { email, password } = req.body;
+      const { email, password } = req.body
       const result = await client.query('SELECT * FROM users WHERE email = $1', [email])
+
       if (result.rows.length === 0) {
           return res.status(400).json({ error: 'Credenciales incorrectas' })
       }
@@ -37,9 +38,9 @@ exports.loginUser = async (req, res) => {
       res.json({ token, userId: user.id })
 
   } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: err.message })
   }
-};
+}
 
 
 exports.getUser = async (req, res) => {
@@ -65,19 +66,21 @@ exports.getUser = async (req, res) => {
 exports.getOrders = async (req, res) => {
     try {
         if (!req.user.isAdmin) {
-            return res.status(403).json({ error: 'Acceso denegado' });
+            return res.status(403).json({ error: 'Acceso denegado' })
         }
 
         const result = await client.query('SELECT * FROM "order"')
-        res.json(result.rows);
+        res.json(result.rows)
+
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: err.message })
     }
-};
+}
 
 
 //Crear Pedido
 exports.createOrder = async (req, res) => {
+
     const { products, status } = req.body
 
     try {
@@ -96,11 +99,12 @@ exports.createOrder = async (req, res) => {
             }
         }
 
-        // Inserta el pedido
+        //Inserta el pedido
         const orderResult = await client.query(
             'INSERT INTO "order" (total_minutes, total_price, status) VALUES ($1, $2, $3) RETURNING order_id',
             [totalMinutes, totalPrice, status]
         )
+
         const orderId = orderResult.rows[0].order_id
 
         //Productos de tabla orderproduct
@@ -119,6 +123,7 @@ exports.createOrder = async (req, res) => {
         }
 
         res.status(201).json({ order_id: orderId })
+
     } catch (err) {
         console.error('Error creating order:', err)
         res.status(500).json({ error: err.message })
@@ -153,7 +158,7 @@ exports.createOrder = async (req, res) => {
       const result = await client.query(
         'UPDATE "order" SET total_minutes = $1, total_price = $2, status = $3, updated_at = NOW() WHERE order_id = $4 RETURNING *',
         [totalMinutes, totalPrice, status, order_id]
-      );
+      )
   
       if (result.rows.length === 0) {
         return res.status(404).json({ error: 'Pedido no encontrado' })
@@ -180,7 +185,7 @@ exports.createOrder = async (req, res) => {
     } catch (err) {
       res.status(500).json({ error: err.message })
     }
-  };
+  }
   
   //Eliminar pedido
   exports.deleteOrder = async (req, res) => {
