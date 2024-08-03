@@ -17,13 +17,15 @@ module.exports = (req, res, next) => {
         console.log("AuthMiddleware decoded:", decoded)
 
         next()
-    } catch (err) {
-
-        console.log("AuthMiddleware error:", err)
-
-        res.status(400).json({ error: 'Token inválido' })
     }
-};
+    
+    catch (error) {
+        if (error.name === 'TokenExpiredError') {
+          return res.status(401).json({ message: 'Token expired', error: error.message })
+        }
+        return res.status(401).json({ message: 'Authentication failed', error: error.message })
+      }
+    }
 
 
 
